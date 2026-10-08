@@ -1,0 +1,34 @@
+[package]
+name = "accelerate"
+version = "0.1.0"
+edition = "2024"
+description = "Reusable native surface presentation and software acceleration primitives"
+license = "GPL-3.0-or-later OR LicenseRef-Commercial"
+repository = "https://github.com/opensitez/accelerate"
+readme = "README.md"
+keywords = ["gpu", "acceleration", "graphics", "compositor", "rendering"]
+categories = ["graphics", "rendering"]
+
+[workspace]
+
+[features]
+# Compile-check platform modules without executing them on another OS.
+backend-check = []
+
+[dependencies]
+tiny-skia = "0.12"
+raw-window-handle = "0.6"
+
+[target.'cfg(any(target_os = "macos", target_os = "linux", target_os = "windows"))'.dependencies]
+libloading = "0.8"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+objc2-core-foundation = { version = "0.3.2", default-features = false, features = ["std", "CFCGTypes"] }
+objc2-core-graphics = { version = "0.3.2", default-features = false, features = ["std", "objc2", "CGColorSpace", "CGDataProvider", "CGImage"] }
+objc2-foundation = { version = "0.3.2", default-features = false, features = ["std", "NSObject"] }
+objc2-quartz-core = { version = "0.3.2", default-features = false, features = ["std", "objc2-core-foundation", "CALayer", "CATransaction"] }
+
+[target.'cfg(target_os = "macos")'.dev-dependencies]
+objc2-core-graphics = { version = "0.3.2", default-features = false, features = ["CGBitmapContext", "CGContext"] }
+objc2-quartz-core = { version = "0.3.2", default-features = false, features = ["objc2-core-graphics"] }
